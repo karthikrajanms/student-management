@@ -35,6 +35,26 @@ public class StudentImplementation implements StudentService {
 
     @Override
     public Student getStudentById(Integer studentId) {
-       return studentRepository.findById(studentId).orElseThrow(()->new RuntimeException("Student " +studentId+" is not found "));
+       return studentRepository.findById(studentId).orElseThrow(()->new RuntimeException("Student Id < " +studentId+" > is not found "));
+    }
+
+    @Override
+    public Student updateStudent(StudentBean studentBean,Integer studentId) {
+        Student updatedStudent = studentRepository.findById(studentId).
+                orElseThrow(() -> new RuntimeException("Student Id < " + studentId + " > is not found "));
+        updatedStudent.setStudentName(studentBean.getStudentName());
+        updatedStudent.setCity(studentBean.getCity());
+        updatedStudent.setDepartment(studentBean.getDepartment());
+        updatedStudent.setBirthDate(new DateUtils().convertStringToLocalDate(studentBean.getBirthDate()));
+        return studentRepository.save(updatedStudent);
+
+    }
+
+    @Override
+    public String deleteByStudentId(Integer studentId) {
+        Student student = studentRepository.findById(studentId).
+                orElseThrow(() -> new RuntimeException("Student Id < " + studentId + " > is not found "));
+        studentRepository.deleteById(student.getId());
+        return "Successfully deleted Student id " + studentId + " from Database.";
     }
 }

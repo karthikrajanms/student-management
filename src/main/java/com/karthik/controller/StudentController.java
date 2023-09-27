@@ -2,7 +2,6 @@ package com.karthik.controller;
 
 import com.karthik.bean.StudentBean;
 import com.karthik.entity.Student;
-import com.karthik.repository.StudentRepository;
 import com.karthik.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,9 +26,18 @@ public class StudentController {
     ResponseEntity<List<Student>> getStudents(){
         return new ResponseEntity<>(studentService.getAllStudents(), HttpStatus.OK);
     }
-    @GetMapping("{studentId}")
+    @GetMapping("find/{studentId}")
     ResponseEntity<Student> getStudentById(@PathVariable Integer studentId){
         return new ResponseEntity<>(studentService.getStudentById(studentId), HttpStatus.OK);
     }
 
+    @PutMapping("update/{studentId}")
+    ResponseEntity<Student> updateStudentById(@RequestBody StudentBean student,@PathVariable Integer studentId){
+        return new ResponseEntity<>(studentService.updateStudent(student,studentId), HttpStatus.OK);
+    }
+
+    @DeleteMapping("delete/{studentId}")
+    ResponseEntity<String> deleteById(@PathVariable Integer studentId){
+        return new ResponseEntity<>(studentService.deleteByStudentId(studentId), HttpStatus.OK);
+    }
 }

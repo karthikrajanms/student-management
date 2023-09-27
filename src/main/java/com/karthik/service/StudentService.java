@@ -13,4 +13,8 @@ public interface StudentService {
     List<Student> getAllStudents();
 
     Student getStudentById(Integer studentId);
+
+    Student updateStudent(StudentBean studentBean,Integer studentId);
+
+    String deleteByStudentId(Integer studentId);
 }

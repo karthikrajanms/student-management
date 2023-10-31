@@ -4,6 +4,7 @@ import com.karthik.bean.StudentBean;
 import com.karthik.entity.Student;
 import com.karthik.service.StudentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,13 +13,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/student/")
-@RequiredArgsConstructor
 public class StudentController {
 
-    private final StudentService studentService;
+
+    @Autowired
+    private  StudentService studentService;
 
     @PostMapping("save")
-    ResponseEntity<Student> saveStudent(@RequestBody StudentBean student){
+    ResponseEntity<StudentBean> saveStudent(@RequestBody StudentBean student){
         return new ResponseEntity<>(studentService.saveStudent(student), HttpStatus.CREATED);
     }
 

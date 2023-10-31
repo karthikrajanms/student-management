@@ -8,7 +8,7 @@ import java.util.List;
 public interface StudentService {
 
 
-    Student saveStudent(StudentBean student);
+    StudentBean saveStudent(StudentBean student);
 
     List<Student> getAllStudents();
 

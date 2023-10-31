@@ -5,8 +5,8 @@ import java.time.format.DateTimeFormatter;
 
 public class DateUtils {
 
-    public LocalDate convertStringToLocalDate(String date){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(CommonConstants.DATE_FORMAT);
+    public static LocalDate convertStringToLocalDate(String date){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return LocalDate.parse(date, formatter);
     }
 }

@@ -1,10 +1,13 @@
 package com.karthik.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
+
+import static jakarta.persistence.CascadeType.ALL;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Data
 @Entity
@@ -12,9 +15,8 @@ import java.time.LocalDate;
 public class Student {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "student_id")
-    private Integer id;
+    @GeneratedValue(strategy = IDENTITY)
+    private Integer studentId;
     @Column(name = "student_name")
     private String studentName;
     @Column(name = "department")
@@ -23,4 +25,9 @@ public class Student {
     private LocalDate birthDate;
     @Column(name = "city")
     private String city;
+    @Column(name = "email")
+    private String email;
+    @OneToMany(cascade = ALL)
+    @JoinColumn(name = "student_id",referencedColumnName = "studentId")
+    private List<Course> courses;
 }

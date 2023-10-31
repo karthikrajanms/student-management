@@ -1,31 +1,54 @@
 package com.karthik.implementation;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.karthik.bean.CourseBean;
 import com.karthik.bean.StudentBean;
+import com.karthik.entity.Course;
 import com.karthik.entity.Student;
+import com.karthik.repository.CourseRepository;
 import com.karthik.repository.StudentRepository;
 import com.karthik.service.StudentService;
 import com.karthik.utils.DateUtils;
-import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class StudentImplementation implements StudentService {
 
-    private final StudentRepository studentRepository;
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private CourseRepository courseRepository;
 
     @Override
-    public Student saveStudent(StudentBean studentRequest) {
-        Student newStudent = new Student();
-        newStudent.setStudentName(studentRequest.getStudentName());
-        newStudent.setCity(studentRequest.getCity());
-        newStudent.setDepartment(studentRequest.getDepartment());
-        LocalDate studentBirthDate = new DateUtils().convertStringToLocalDate(studentRequest.getBirthDate());
-        newStudent.setBirthDate(studentBirthDate);
-        return studentRepository.save(newStudent);
+    public StudentBean saveStudent(StudentBean studentRequest) {
+        saveFunction(studentRequest);
+        return studentRequest;
+
+    }
+
+    private void saveFunction(StudentBean studentRequest) {
+        try {
+            Student student = new Student();
+            student.setEmail(studentRequest.getEmail());
+            student.setStudentName(studentRequest.getStudentName());
+            student.setBirthDate(DateUtils.convertStringToLocalDate(studentRequest.getBirthDate()));
+            student.setCity(studentRequest.getCity());
+            student.setDepartment(studentRequest.getDepartment());
+            List<Course> courses = new ModelMapper().map(studentRequest.getCourses(), new TypeToken<List<Course>>() {}.getType());
+            student.setCourses(courses);
+            studentRepository.save(student);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @Override
@@ -45,7 +68,7 @@ public class StudentImplementation implements StudentService {
         updatedStudent.setStudentName(studentBean.getStudentName());
         updatedStudent.setCity(studentBean.getCity());
         updatedStudent.setDepartment(studentBean.getDepartment());
-        updatedStudent.setBirthDate(new DateUtils().convertStringToLocalDate(studentBean.getBirthDate()));
+        updatedStudent.setBirthDate( DateUtils.convertStringToLocalDate(studentBean.getBirthDate()));
         return studentRepository.save(updatedStudent);
 
     }
@@ -54,7 +77,7 @@ public class StudentImplementation implements StudentService {
     public String deleteByStudentId(Integer studentId) {
         Student student = studentRepository.findById(studentId).
                 orElseThrow(() -> new RuntimeException("Student Id < " + studentId + " > is not found "));
-        studentRepository.deleteById(student.getId());
+        studentRepository.deleteById(student.getStudentId());
         return "Successfully deleted Student id " + studentId + " from Database.";
     }
 }

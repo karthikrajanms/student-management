@@ -3,6 +3,7 @@ package com.karthik.controller;
 import com.karthik.bean.AuthorBean;
 import com.karthik.entity.AuthorEntity;
 import com.karthik.service.AuthorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +18,8 @@ public class BookController {
 
     private final AuthorService authorService;
     @PostMapping("save")
-    ResponseEntity<String> saveStudent(@RequestBody AuthorEntity authorEntity){
-        return new ResponseEntity<>(authorService.saveAuthor(authorEntity), HttpStatus.CREATED);
+    ResponseEntity<String> saveStudent(@Valid @RequestBody AuthorBean authorBean){
+        return new ResponseEntity<>(authorService.saveAuthor(authorBean), HttpStatus.CREATED);
     }
 
     @GetMapping("get-all")

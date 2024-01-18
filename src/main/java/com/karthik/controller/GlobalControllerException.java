@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class GlobalControllerException {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(value = HttpStatus.BAD_GATEWAY)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage getErrorMessage(MethodArgumentNotValidException ex, WebRequest request){
 
         Set<String> errors = ex.getFieldErrors().stream()
@@ -28,7 +28,7 @@ public class GlobalControllerException {
         return getErrorMessage(request, errors);
     }
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(value = HttpStatus.BAD_GATEWAY)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorMessage getException(Exception ex, WebRequest request){
         Set<String> errors = Collections.singleton(ex.getMessage());
         return getErrorMessageForException(request, errors);
@@ -37,7 +37,7 @@ public class GlobalControllerException {
     private static ErrorMessage getErrorMessage(WebRequest request, Set<String> errors) {
         return new ErrorMessage("Unable to process request",
                 request.getDescription(false),
-                HttpStatus.BAD_GATEWAY.value(),
+                HttpStatus.BAD_REQUEST.value(),
                 new Date(),
                 errors
                 );

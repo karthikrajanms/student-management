@@ -1,9 +1,9 @@
 package com.karthik.implementation;
 
 import com.karthik.bean.AuthorBean;
+import com.karthik.bean.BookBean;
 import com.karthik.entity.AuthorEntity;
 import com.karthik.entity.BookEntity;
-import com.karthik.repository.BookRepository;
 import com.karthik.repository.AuthorRepository;
 import com.karthik.service.AuthorService;
 import lombok.RequiredArgsConstructor;
@@ -20,18 +20,17 @@ import java.util.List;
 public class AuthorImplementation implements AuthorService {
 
     private final AuthorRepository authorRepository;
-    private final BookRepository bookRepository;
 
     @Override
-    public String saveAuthor(AuthorEntity authorEntity) {
+    public String saveAuthor(AuthorBean authorEntity) {
         AuthorEntity author = new AuthorEntity();
         author.setAuthorName(authorEntity.getAuthorName());
         author.setEmail(authorEntity.getEmail());
         List<BookEntity> bookEntities = new ArrayList<>();
-        for (BookEntity bookEntity : authorEntity.getBooks()) {
+        for (BookBean books : authorEntity.getBooks()) {
             BookEntity book = new BookEntity();
-            book.setTitle(bookEntity.getTitle());
-            book.setDescription(bookEntity.getDescription());
+            book.setTitle(books.getTitle());
+            book.setDescription(books.getDescription());
             book.setAuthor(author);
             bookEntities.add(book);
         }

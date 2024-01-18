@@ -6,7 +6,7 @@ import com.karthik.entity.AuthorEntity;
 import java.util.List;
 
 public interface AuthorService {
-    String saveAuthor(AuthorEntity authorEntity);
+    String saveAuthor(AuthorBean authorEntity);
 
     List<AuthorBean> getAllAuthors();
 
